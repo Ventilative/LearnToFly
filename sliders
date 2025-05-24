@@ -1,0 +1,39 @@
+Web VPython 3.2
+
+radius = 1
+pmass = 1
+gravity = 9.8
+rpm = 10
+
+radius_label = wtext(text=f'Radius = {radius:.2f} m\n')
+pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
+gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
+rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
+
+def update_radius(s):
+    global radius
+    radius = s.value
+    radius_label.text = f'Radius = {radius:.2f} m\n'
+
+def update_pmass(s):
+    global pmass
+    pmass = s.value
+    pmass_label.text = f'Penguin Mass = {pmass:.2f} kg\n'
+
+def update_gravity(s):
+    global gravity
+    gravity = s.value
+    gravity_label.text = f'Gravity = {gravity:.2f} m/s²\n'
+
+def update_rpm(s):
+    global rpm
+    rpm = s.value
+    rpm_label.text = f'RPM = {rpm:.2f}\n'
+
+radius_slider = slider(min=0.1, max=10, value=radius, length=300, bind=update_radius, right=15)
+wtext(text='\n\n')
+pmass_slider = slider(min=0.1, max=200, value=pmass, length=300, bind=update_pmass, right=15)
+wtext(text='\n\n')
+gravity_slider = slider(min=0, max=20, value=gravity, length=300, bind=update_gravity, right=15)
+wtext(text='\n\n')
+rpm_slider = slider(min=0, max=100, value=rpm, length=300, bind=update_rpm, right=15)
