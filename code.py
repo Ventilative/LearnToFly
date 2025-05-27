@@ -4,7 +4,7 @@ scene = canvas(width = 900, height = 600)
 scene.background = vector(135/255, 206/255, 235/255)
 
 #scene.userzoom = False
-scene.userpan = False
+#scene.userpan = False
 scene.userspin = False
 
 radii = 6378137
@@ -19,9 +19,13 @@ pmass = 1
 gravity = 9.8
 rpm = 1000
 
+theta = 0;
+
 centrifugue = cylinder(pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20, axis = vec(1201.350, 551.637, 5615.770), radius = Centradius, color = color.red, texture = textures.wood)
 
-radius_label = wtext(text=f'Radius = {Centradius:.2f} m\n')
+penguin = sphere(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(centrifugue.radius / 20 * cos(theta), centrifugue.radius / 20 * sin(theta), 0), radius = 5000, color = color.blue)
+
+radius_label = wtext(text=f'Radius = {Centradius/100:.2f} m\n')
 pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
 gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
 rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
@@ -29,7 +33,7 @@ rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
 def update_radius(s):
     global radius
     radius = s.value
-    radius_label.text = f'Radius = {radius:.2f} m\n'
+    radius_label.text = f'Radius = {radius/100:.2f} m\n'
     centrifugue.radius = s.value
     centrifugue.pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * (s.value - 30000))
     
@@ -41,7 +45,11 @@ spinning = False
 def spin():
     spinning = True
     for i in range(5000):
-        rate(rpm)
+        rate(50)
         centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
+        theta = i*0.05
+        penguin.pos = penguin.pos + vec(centrifugue.radius / 10 * cos(theta), centrifugue.radius / 10 * sin(theta), 0)
+      
+        
 
 button(text = "spin", bind = spin)
