@@ -25,7 +25,7 @@ centrifugue = cylinder(pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770)
 
 penguin = sphere(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(centrifugue.radius / 20 * cos(theta), centrifugue.radius / 20 * sin(theta), 0), radius = 50000, texture = "https://shellsamurai.com/wp-content/uploads/2023/04/tux.jpg")
 
-radius_label = wtext(text=f'Radius = {Centradius/100:.2f} m\n')
+radius_label = wtext(text=f'\nRadius = {Centradius/100:.2f} m\n')
 pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
 gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
 rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
@@ -72,3 +72,4 @@ def spin():
         penguin.pos = penguin.pos + vec(centrifugue.radius / 10 * cos(theta), centrifugue.radius / 10 * sin(theta), 0)
 
 button(text = "spin", bind = spin)
+wtext(text=f'\n\n\n\n')
