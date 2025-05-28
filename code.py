@@ -17,7 +17,7 @@ scene.camera.axis = vec(1201350, 551637, 5615770)
 Centradius = 30000
 pmass = 1
 gravity = 9.8
-rpm = 400
+rpm = 600
 
 theta = 0;
 
@@ -63,11 +63,21 @@ wtext(text=f'RPM \n\n')
 
 def spin():
     spinner.disabled = True
-    for i in range(5000):
+    for i in range(5060):
         rate(rpm)
         centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
         theta = i*0.05
         penguin.pos = penguin.pos + vec(centrifugue.radius * (1/33) * cos(theta), centrifugue.radius * (1/33) * sin(theta), 0)
     spinner.disabled = False
-        
+    penguin.radius = 50000
+    launch()
+
+velocity = 1885
+
+def launch():
+    for i in range(1000000):
+        rate(600)
+        penguin.pos = penguin.pos + vec(0, velocity, 0)
+        scene.camera.pos += vec(scene.forward * -i)
+    
 spinner = button(text = "spin", bind = spin, disabled = False)
