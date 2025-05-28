@@ -3,8 +3,8 @@ Web VPython 3.2
 scene = canvas(width = 900, height = 600)
 scene.background = vector(135/255, 206/255, 235/255)
 
-#scene.userzoom = False
-#scene.userpan = False
+scene.userzoom = False
+scene.userpan = False
 scene.userspin = False
 
 radii = 6378137
@@ -17,15 +17,15 @@ scene.camera.axis = vec(1201350, 551637, 5615770)
 Centradius = 30000
 pmass = 1
 gravity = 9.8
-rpm = 1000
+rpm = 400
 
 theta = 0;
 
 centrifugue = cylinder(pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20, axis = vec(1201.350, 551.637, 5615.770), radius = Centradius, color = color.red, texture = textures.wood)
 
-penguin = sphere(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(centrifugue.radius / 20 * cos(theta), centrifugue.radius / 20 * sin(theta), 0), radius = 5000, color = color.blue)
+penguin = sphere(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(0, centrifugue.radius * -3/5 * cos(theta), 0), radius = 2500, color = color.blue)
 
-radius_label = wtext(text=f'Radius = {Centradius/100:.2f} m\n')
+radius_label = wtext(text=f'\nRadius = {Centradius/100:.2f} m\n')
 pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
 gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
 rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
@@ -36,20 +36,38 @@ def update_radius(s):
     radius_label.text = f'Radius = {radius/100:.2f} m\n'
     centrifugue.radius = s.value
     centrifugue.pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * (s.value - 30000))
-    
-radius_slider = slider(min=30000, max=100000, value=Centradius, length=500, bind=update_radius, right=15)
-wtext(text='\n\n')
 
-spinning = False
+def update_pmass(s):
+    global pmass
+    pmass = s.value
+    pmass_label.text = f'Penguin Mass = {pmass:.2f} kg\n'
+    
+def update_gravity(s):
+    global gravity
+    gravity = s.value
+    gravity_label.text = f'Gravity = {gravity:.2f} m/s²\n'
+    
+def update_rpm(s):
+    global rpm
+    rpm = s.value
+    rpm_label.text = f'RPM = {rpm:.2f}\n'
+    
+centradius_slider = slider(min=30000, max=100000, value=Centradius, length=500, bind=update_radius, right=15)
+wtext(text=f'Centrifuge Radius \n\n')
+pmass_slider = slider(min=0.1, max=200, value=pmass, length=500, bind=update_pmass, right=15)
+wtext(text=f'Penguin Mass \n\n')
+gravity_slider = slider(min=0, max=20, value=gravity, length=500, bind=update_gravity, right=15) 
+wtext(text=f'Gravity \n\n')
+rpm_slider = slider(min=0, max=2000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
+wtext(text=f'RPM \n\n')
 
 def spin():
-    spinning = True
+    spinner.disabled = True
     for i in range(5000):
-        rate(50)
+        rate(rpm)
         centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
         theta = i*0.05
-        penguin.pos = penguin.pos + vec(centrifugue.radius / 10 * cos(theta), centrifugue.radius / 10 * sin(theta), 0)
-      
+        penguin.pos = penguin.pos + vec(centrifugue.radius * (1/33) * cos(theta), centrifugue.radius * (1/33) * sin(theta), 0)
+    spinner.disabled = False
         
-
-button(text = "spin", bind = spin)
+spinner = button(text = "spin", bind = spin, disabled = False)
