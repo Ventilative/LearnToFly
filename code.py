@@ -61,6 +61,8 @@ wtext(text=f'Gravity \n\n')
 rpm_slider = slider(min=0, max=2000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
 wtext(text=f'RPM \n\n')
 
+launched = False
+
 def spin():
     spinner.disabled = True
     for i in range(5 * rpm):
@@ -69,29 +71,39 @@ def spin():
         theta = i*0.05
         penguin.pos = penguin.pos + vec(centrifugue.radius * (1/30) * cos(theta), centrifugue.radius * (1/30) * sin(theta), 0)
     spinner.disabled = False
-    launch()
+    launched = True
+    
     
 
 velocity = 900
 acceleration = 9.81
 G = 6.67 * (10 ** -11)
 M = 6 * (10 ** 24)
-t = 0
-dt = 3600
 dist = penguin.pos - earth.pos
-
-def calcDist():
-    dist = penguin.pos - earth.pos
+t = 0
+dt = 1
 
 def calcForce():
     instantForce = 0
-
-def launch():
-    while (True):
-        rate(600)
-        penguin.pos = penguin.pos + vec(0, velocity, 0)
-        scene.camera.pos += vec(scene.forward * (-3 * t))
-        t += dt
     
-spinner = button(text = "spin", bind = spin, disabled = False)
-distance = button(text = "AHH", bind = calcDist)
+def launch():
+    global launched
+    launched = True
+    print(launched)
+    
+spinner = button(text = "spin", bind = launch, disabled = False)
+
+while True:
+    rate(750)
+    if (launched):
+        penguin.pos = penguin.pos + vec(0, velocity, 0)
+        #velocity = velocity + acceleration
+        #acceleration = (-1 * G * M) / (dist.mag() ** 2)
+        dist = penguin.pos - earth.pos
+        #if (i % 101 == 0):
+            #print(dist)
+        scene.camera.pos += vec(scene.forward * -1 * t)
+        t += dt
+
+
+
