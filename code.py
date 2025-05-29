@@ -63,21 +63,35 @@ wtext(text=f'RPM \n\n')
 
 def spin():
     spinner.disabled = True
-    for i in range(5060):
+    for i in range(5 * rpm):
         rate(rpm)
         centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
         theta = i*0.05
         penguin.pos = penguin.pos + vec(centrifugue.radius * (1/30) * cos(theta), centrifugue.radius * (1/30) * sin(theta), 0)
     spinner.disabled = False
-    penguin.radius = 50000
     launch()
+    
 
 velocity = 900
+acceleration = 9.81
+G = 6.67 * (10 ** -11)
+M = 6 * (10 ** 24)
+t = 0
+dt = 3600
+dist = penguin.pos - earth.pos
+
+def calcDist():
+    dist = penguin.pos - earth.pos
+
+def calcForce():
+    instantForce = 0
 
 def launch():
-    for i in range(1000000):
+    while (True):
         rate(600)
         penguin.pos = penguin.pos + vec(0, velocity, 0)
-        scene.camera.pos += vec(scene.forward * -i)
+        scene.camera.pos += vec(scene.forward * (-3 * t))
+        t += dt
     
 spinner = button(text = "spin", bind = spin, disabled = False)
+distance = button(text = "AHH", bind = calcDist)
