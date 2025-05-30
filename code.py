@@ -17,7 +17,7 @@ scene.camera.axis = vec(1201350, 551637, 5615770)
 Centradius = 15000
 pmass = 1
 gravity = 9.8
-rpm = 600
+rpm = 2000
 
 theta = 0;
 
@@ -31,11 +31,12 @@ gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
 rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
 
 def update_radius(s):
-    global radius
+    global radius, actualRadius
     radius = s.value
     radius_label.text = f'Radius = {radius/1000:.2f} m\n'
     centrifugue.radius = s.value
     centrifugue.pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * -1 * Centradius) + (scene.up * (s.value - 15000))
+    actualRadius = s.value / 1000
 
 def update_pmass(s):
     global pmass
@@ -58,7 +59,7 @@ pmass_slider = slider(min=0.1, max=200, value=pmass, length=500, bind=update_pma
 wtext(text=f'Penguin Mass \n\n')
 gravity_slider = slider(min=0, max=20, value=gravity, length=500, bind=update_gravity, right=15) 
 wtext(text=f'Gravity \n\n')
-rpm_slider = slider(min=0, max=2000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
+rpm_slider = slider(min=0, max=6000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
 wtext(text=f'RPM \n\n')
 
 launched = False
@@ -71,38 +72,45 @@ def spin():
         theta = i*0.05
         penguin.pos = penguin.pos + vec(centrifugue.radius * (1/30) * cos(theta), centrifugue.radius * (1/30) * sin(theta), 0)
     spinner.disabled = False
-    launched = True
-    
+    launch()
     
 
-velocity = 900
+actualRadius = centrifugue.radius / 1000
+velocity = actualRadius * (2 * pi) * (rpm / 60) 
 acceleration = 9.81
 G = 6.67 * (10 ** -11)
 M = 6 * (10 ** 24)
 dist = penguin.pos - earth.pos
 t = 0
-dt = 1
-
-def calcForce():
-    instantForce = 0
+dt = 3600
     
 def launch():
     global launched
     launched = True
-    print(launched)
     
 spinner = button(text = "spin", bind = launch, disabled = False)
+zoomedout = False
+velocityIni = False
 
 while True:
-    rate(750)
+    rate(60)
+    velocity = actualRadius * (2 * pi) * (rpm / 60)
     if (launched):
-        penguin.pos = penguin.pos + vec(0, velocity, 0)
-        #velocity = velocity + acceleration
-        #acceleration = (-1 * G * M) / (dist.mag() ** 2)
         dist = penguin.pos - earth.pos
-        #if (i % 101 == 0):
-            #print(dist)
-        scene.camera.pos += vec(scene.forward * -1 * t)
+        penguin.pos = penguin.pos + vec(0, velocity, 0)
+        velocity = velocity + acceleration
+        acceleration = (-1 * G * M) / (dist.mag ** 2)
+        if (t % 101 == 0):
+            print(dist.mag)
+            print(acceleration)
+            print(velocity)
+            print(scene.camera.pos)
+        if (dist.mag > 5000 and scene.camera.pos.mag > 0):
+            if (zoomedout = False):
+                scene.camera.pos = scene.camera.pos + vec(scene.forward * -1 * 5000)
+                zoomedout = True
+            scene.camera.pos += vec(scene.forward * -1 * t)
+        penguin.radius = penguin.radius + dist.mag * 5000
         t += dt
 
 
