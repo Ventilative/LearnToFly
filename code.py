@@ -3,9 +3,9 @@ Web VPython 3.2
 scene = canvas(width = 900, height = 600)
 scene.background = vector(135/255, 206/255, 235/255)
 
-scene.userzoom = False
-scene.userpan = False
-scene.userspin = False
+#scene.userzoom = False
+#scene.userpan = False
+#scene.userspin = False
 
 radii = 6378137
 
@@ -23,7 +23,9 @@ theta = 0;
 
 centrifugue = cylinder(pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * -1 * Centradius), axis = vec(1201.350, 551.637, 5615.770), radius = Centradius, color = color.red, texture = textures.wood)
 
-penguin = sphere(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(0, centrifugue.radius * -3/7 * cos(theta), 0), radius = 1500, color = color.blue)
+penguin = cylinder(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(0, centrifugue.radius * -3/7 * cos(theta), 0), radius = 2500, axis = vec(120.1350, 55.1637, 561.5770), color = color.white, 
+make_trail = True, trail_radius = 500, trail_type = "points", retain = 20, 
+texture = "https://th.bing.com/th/id/OIP.Kbkh1q-J4T8vnU2NM1DW6AHaI-?w=149&h=180&c=7&r=0&o=5&pid=1.7")
 
 radius_label = wtext(text=f'\nRadius = {Centradius/1000:.2f} m\n')
 pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
@@ -88,13 +90,13 @@ def launch():
     global launched
     launched = True
     
-spinner = button(text = "spin", bind = launch, disabled = False)
-zoomedout = False
-velocityIni = False
+spinner = button(text = "spin", bind = spin, disabled = False)
 
 while True:
+    global t
     rate(60)
-    velocity = actualRadius * (2 * pi) * (rpm / 60)
+    if (t == 0):
+        velocity = actualRadius * (2 * pi) * (rpm / 60)
     if (launched):
         dist = penguin.pos - earth.pos
         penguin.pos = penguin.pos + vec(0, velocity, 0)
@@ -104,14 +106,22 @@ while True:
             print(dist.mag)
             print(acceleration)
             print(velocity)
-            print(scene.camera.pos)
-        if (dist.mag > 5000 and scene.camera.pos.mag > 0):
-            if (zoomedout = False):
-                scene.camera.pos = scene.camera.pos + vec(scene.forward * -1 * 5000)
-                zoomedout = True
-            scene.camera.pos += vec(scene.forward * -1 * t)
-        penguin.radius = penguin.radius + dist.mag * 5000
+            #print(scene.camera.pos)
+        if (dist.mag > 6700000):
+            penguin.radius = 3000
+            scene.camera.pos = penguin.pos + (scene.forward * -1 * 70000)
+        else:
+            scene.camera.pos = vec(77440.8, 6389600, 278902)
+            scene.camera.axis = vec(1201350, 551637, 5615770)
+        if (dist.mag < earth.radius - 30000):
+            break
         t += dt
+
+BadEnding = text(text = 'OH NO! \nIt\'s a penguin \ncrash and burn!!', align = 'center', color = color.red, pos = vec(0, 30000, 0))
+BadEnding.height = 1
+scene.camera.axis = BadEnding.axis.cross(vec(0, -1, 0))
+scene.camera.pos = BadEnding.pos + (scene.camera.axis * -1 * 10)
+
 
 
 
