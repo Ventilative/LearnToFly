@@ -18,6 +18,7 @@ Centradius = 15000
 pmass = 1
 gravity = 9.8
 rpm = 2000
+speed = 120
 
 theta = 0;
 
@@ -31,6 +32,7 @@ radius_label = wtext(text=f'\nRadius = {Centradius/1000:.2f} m\n')
 pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
 gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
 rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
+speed_label = wtext(text=f'Simulation Speed = {speed:.2f}\n')
 
 def update_radius(s):
     global radius, actualRadius
@@ -54,6 +56,10 @@ def update_rpm(s):
     global rpm
     rpm = s.value
     rpm_label.text = f'RPM = {rpm:.2f}\n'
+def update_speed(s):
+    global speed
+    speed = s.value
+    speed_label.text = f'Speed = {speed:.2f}\n'
     
 centradius_slider = slider(min=15000, max=45000, value=Centradius, length=500, bind=update_radius, right=15)
 wtext(text=f'Centrifuge Radius \n\n')
@@ -63,6 +69,8 @@ gravity_slider = slider(min=0, max=20, value=gravity, length=500, bind=update_gr
 wtext(text=f'Gravity \n\n')
 rpm_slider = slider(min=0, max=6000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
 wtext(text=f'RPM \n\n')
+speed_slider = slider(min=0, max=2000, value=speed, length=500, bind=update_speed, right=15, step = 5)
+wtext(text=f'Simulation Speed \n\n')
 
 launched = False
 
@@ -96,7 +104,7 @@ crashed = False
 initialVel = actualRadius * (2 * pi) * (rpm / 60)
 while True:
     global t
-    rate(120)
+    rate(speed)
     if (t == 0):
         velocity = actualRadius * (2 * pi) * (rpm / 60)
     if (launched):
@@ -118,7 +126,7 @@ while True:
         if (dist.mag < earth.radius - 30000):
             crashed = True
             break
-        if (abs(acceleration) < 0.5):
+        if (abs(acceleration) < 0.01):
             break
         t += dt
 
