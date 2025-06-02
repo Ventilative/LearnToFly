@@ -72,7 +72,7 @@ def spin():
         rate(rpm)
         centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
         theta = i*0.05
-        penguin.pos = penguin.pos + vec(centrifugue.radius * (1/30) * cos(theta), centrifugue.radius * (1/30) * sin(theta), 0)
+        penguin.pos = penguin.pos + vec(centrifugue.radius * (1.02/28) * cos(theta), centrifugue.radius * (1.02/28) * sin(theta), 0)
     spinner.disabled = False
     launch()
     
@@ -92,9 +92,11 @@ def launch():
     
 spinner = button(text = "spin", bind = spin, disabled = False)
 
+crashed = False
+initialVel = actualRadius * (2 * pi) * (rpm / 60)
 while True:
     global t
-    rate(60)
+    rate(120)
     if (t == 0):
         velocity = actualRadius * (2 * pi) * (rpm / 60)
     if (launched):
@@ -114,14 +116,22 @@ while True:
             scene.camera.pos = vec(77440.8, 6389600, 278902)
             scene.camera.axis = vec(1201350, 551637, 5615770)
         if (dist.mag < earth.radius - 30000):
+            crashed = True
+            break
+        if (abs(acceleration) < 0.5):
             break
         t += dt
 
-BadEnding = text(text = 'OH NO! \nIt\'s a penguin \ncrash and burn!!', align = 'center', color = color.red, pos = vec(0, 30000, 0))
-BadEnding.height = 1
-scene.camera.axis = BadEnding.axis.cross(vec(0, -1, 0))
-scene.camera.pos = BadEnding.pos + (scene.camera.axis * -1 * 10)
-
+if crashed:
+    BadEnding = text(text = 'OH NO! \nIt\'s a penguin \ncrash and burn!!', align = 'center', color = color.red, pos = vec(0, 30000, 0))
+    BadEnding.height = 1
+    scene.camera.axis = BadEnding.axis.cross(vec(0, -1, 0))
+    scene.camera.pos = BadEnding.pos + (scene.camera.axis * -1 * 10)
+else:
+    GoodEnding = text(text = 'Your penguin journeyed \nto the galaxy far far \naway..', align = 'center', color = color.green, pos = vec(0, 30000, 0))
+    GoodEnding.height = 1
+    scene.camera.axis = GoodEnding.axis.cross(vec(0, -1, 0))
+    scene.camera.pos = GoodEnding.pos + (scene.camera.axis * -1 * 10)
 
 
 
