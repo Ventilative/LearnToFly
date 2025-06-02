@@ -34,10 +34,13 @@ gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
 rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
 speed_label = wtext(text=f'Simulation Speed = {speed:.2f}\n')
 
+w = label(canvas = scene, visible = True, pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius), text = f'\nRadius = {Centradius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n')
+
 def update_radius(s):
     global radius, actualRadius
     radius = s.value
     radius_label.text = f'Radius = {radius/1000:.2f} m\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n'
     centrifugue.radius = s.value
     centrifugue.pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * -1 * Centradius) + (scene.up * (s.value - 15000))
     actualRadius = s.value / 1000
@@ -46,20 +49,25 @@ def update_pmass(s):
     global pmass
     pmass = s.value
     pmass_label.text = f'Penguin Mass = {pmass:.2f} kg\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n'
     
 def update_gravity(s):
     global gravity
     gravity = s.value
     gravity_label.text = f'Gravity = {gravity:.2f} m/s²\n'
-    
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n'
+
 def update_rpm(s):
     global rpm
     rpm = s.value
     rpm_label.text = f'RPM = {rpm:.2f}\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n'
+
 def update_speed(s):
     global speed
     speed = s.value
     speed_label.text = f'Speed = {speed:.2f}\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n'
     
 centradius_slider = slider(min=15000, max=45000, value=Centradius, length=500, bind=update_radius, right=15)
 wtext(text=f'Centrifuge Radius \n\n')
@@ -83,7 +91,6 @@ def spin():
         penguin.pos = penguin.pos + vec(centrifugue.radius * (1.02/28) * cos(theta), centrifugue.radius * (1.02/28) * sin(theta), 0)
     spinner.disabled = False
     launch()
-    
 
 actualRadius = centrifugue.radius / 1000
 velocity = actualRadius * (2 * pi) * (rpm / 60) 
