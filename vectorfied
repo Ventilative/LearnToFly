@@ -121,6 +121,9 @@ def launch():
     
 spinner = button(text = "SPIN", bind = spin, disabled = False)
 
+zed = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius), 
+text = f'\nSpeed = 0 m/s\n Acceleration = {acceleration.mag} m/s²\n')
+
 crashed = False
 followPenguin = True
 
@@ -138,6 +141,8 @@ while True:
             print(dist.mag)
             print(acceleration.mag)
             print(velocity.mag)
+        if (t % 57 == 0):
+            zed.text = f'\nSpeed = {velocity.mag:.2f} m/s\n Acceleration = {acceleration.mag:.2f} m/s²\n'
             #print(scene.camera.pos)
         if (dist.mag > 6700000):
             followPenguin = True
@@ -152,7 +157,8 @@ while True:
         #else:
             #scene.camera.pos = vec(77440.8, 6389600, 278902)
             #scene.camera.axis = vec(1201350, 551637, 5615770)
-        w.pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius)
+        w.pos = scene.camera.pos + vec(6000, 5000, 5615) * 20 + (scene.up * -1 * Centradius)
+        zed.pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius)
         if (dist.mag < earth.radius - 5000):
             crashed = True
             break
