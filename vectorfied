@@ -122,6 +122,14 @@ def launch():
     
 spinner = button(text = "SPIN", bind = spin, disabled = False)
 
+zed = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius), 
+text = f'\nSpeed = 0 m/s\n Acceleration = {acceleration.mag} m/s²\n')
+
+g1 = graph(title="Speed vs Time")
+sCurve = gcurve(graph=g1, color=color.red, label="Speed (m/s)")
+if (t != 0):
+    sCurve.plot(t, 0)
+
 crashed = False
 followPenguin = True
 
@@ -140,6 +148,8 @@ while True:
             print(acceleration.mag)
             print(velocity.mag)
             #print(scene.camera.pos)
+        if (t % 57 == 0):
+            zed.text = f'\nSpeed = {velocity.mag:.2f} m/s\n Acceleration = {acceleration.mag:.2f} m/s²\n'
         if (dist.mag > 6700000):
             followPenguin = True
             bg.texture = "https://th.bing.com/th/id/OIP.NazSofAMbJFgsmr51USrdgAAAA?w=302&h=181&c=7&r=0&o=5&pid=1.7"
@@ -155,11 +165,13 @@ while True:
             #scene.camera.pos = vec(77440.8, 6389600, 278902)
             #scene.camera.axis = vec(1201350, 551637, 5615770)
         w.pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius)
+        zed.pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius)
         if (dist.mag < earth.radius - 5000):
             crashed = True
             break
         if (abs(acceleration.mag) < 0.01):
             break
+        sCurve.plot(t, velocity.mag)
         t += dt
 
 if crashed:
