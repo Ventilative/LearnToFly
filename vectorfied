@@ -7,6 +7,11 @@ scene.userzoom = False
 scene.userpan = False
 scene.userspin = False
 
+t = 0
+g1 = graph(title = "Speed vs Time", align = "right", width = 400, height = 200)
+sCurve = gcurve(graph = g1, color = color.red, label = "Speed (m/s)")
+sCurve.plot(t, 0)
+
 radii = 6378137
 
 earth = sphere(pos = vec(0,0,0), radius = radii, color = color.white, texture = textures.earth)
@@ -113,7 +118,6 @@ acceleration = vec(0, 9.81, 0)
 G = 6.67 * (10 ** -11)
 M = 6 * (10 ** 24)
 dist = penguin.pos - earth.pos
-t = 0
 dt = 3600
     
 def launch():
@@ -124,11 +128,6 @@ spinner = button(text = "SPIN", bind = spin, disabled = False)
 
 zed = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius), 
 text = f'\nSpeed = 0 m/s\n Acceleration = {acceleration.mag} m/s²\n')
-
-g1 = graph(title="Speed vs Time")
-sCurve = gcurve(graph=g1, color=color.red, label="Speed (m/s)")
-if (t != 0):
-    sCurve.plot(t, 0)
 
 crashed = False
 followPenguin = True
@@ -171,7 +170,8 @@ while True:
             break
         if (abs(acceleration.mag) < 0.01):
             break
-        sCurve.plot(t, velocity.mag)
+        if (t != 0):
+            sCurve.plot(t, velocity.mag)
         t += dt
 
 if crashed:
