@@ -1,0 +1,191 @@
+Web VPython 3.2
+
+scene = canvas(width = 900, height = 600)
+scene.background = vector(135/255, 206/255, 235/255)
+
+scene.userzoom = False
+scene.userpan = False
+scene.userspin = False
+
+t = 0
+g1 = graph(title = "Speed vs Time", align = "right", width = 400, height = 200)
+sCurve = gcurve(graph = g1, color = color.red, label = "Speed (m/s)")
+sCurve.plot(t, 0)
+
+radii = 6378137
+
+earth = sphere(pos = vec(0,0,0), radius = radii, color = color.white, texture = textures.earth)
+earth.rotate(axis=vec(1,0,0), angle = pi, origin = vec(0,0,0))
+scene.camera.pos = vec(77440.8, 6389600, 278902)
+scene.camera.axis = vec(1201350, 551637, 5615770)
+
+bg = box(pos = earth.pos + vec(0, 20000000, 40000000), size = vec(100000, 100000000, 100000000), axis = vec(1201.350, 551.637, 5615.770), color = color.white, emissive = True,
+texture = "https://th.bing.com/th/id/OIP.2VpJ6szrAmIlcKgPhRyyEwHaEK?w=321&h=180&c=7&r=0&o=5&pid=1.7")
+
+Centradius = 15000
+pmass = 100
+gravity = 9.8
+rpm = 2000
+speed = 120
+angle = 0
+radius = 15000
+theta = 0;
+
+centrifugue = cylinder(pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * -1 * Centradius), axis = vec(1201.350, 551.637, 5615.770), radius = Centradius, color = color.white,
+texture = "https://th.bing.com/th/id/OIP.5praIOiH0e-7XynQw6Oy4AHaHa?w=160&h=180&c=7&r=0&o=5&pid=1.7")
+
+penguin = cylinder(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5 + vec(0, centrifugue.radius * -3/7 * cos(theta), 0), radius = 2500, axis = vec(120.1350, 55.1637, 561.5770), color = color.white, 
+make_trail = True, trail_radius = 500, trail_type = "points", retain = 40, 
+texture = "https://th.bing.com/th/id/OIP.Kbkh1q-J4T8vnU2NM1DW6AHaI-?w=149&h=180&c=7&r=0&o=5&pid=1.7")
+
+#radius_label = wtext(text=f'\nRadius = {Centradius/1000:.2f} m\n')
+#pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
+#gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
+#rpm_label = wtext(text=f'RPM = {rpm:.2f}\n')
+#speed_label = wtext(text=f'Simulation Speed = {speed:.2f}\n')
+
+w = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius),
+text = f'\nRadius = {Centradius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface) = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n')
+
+def update_radius(s):
+    global radius, actualRadius
+    radius = s.value
+    #radius_label.text = f'Radius = {radius/1000:.2f} m\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface) = {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n'
+    centrifugue.radius = s.value
+    centrifugue.pos = scene.camera.pos + vec(1201.350, 551.637, 5615.770) * 20 + (scene.up * -1 * Centradius) + (scene.up * (s.value - 15000))
+    actualRadius = s.value / 1000
+
+def update_pmass(s):
+    global pmass
+    pmass = s.value
+    penguin.radius = 2500 * (pmass * 0.01)
+    #pmass_label.text = f'Penguin Mass = {pmass:.2f} kg\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface)= {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n'
+    
+def update_gravity(s):
+    global gravity
+    gravity = s.value
+    #gravity_label.text = f'Gravity = {gravity:.2f} m/s²\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface)= {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n'
+
+def update_rpm(s):
+    global rpm
+    rpm = s.value
+    #rpm_label.text = f'RPM = {rpm:.2f}\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface)= {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n'
+
+def update_speed(s):
+    global speed
+    speed = s.value
+    #speed_label.text = f'Speed = {speed:.2f}\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface)= {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n'
+    
+def update_angle(s):
+    global angle
+    angle = s.value
+    #speed_label.text = f'Speed = {speed:.2f}\n'
+    w.text = f'\nRadius = {radius/1000:.2f} m\n Penguin Mass = {pmass:.2f} kg\n Gravity (Surface)= {gravity:.2f} m/s²\n RPM = {rpm:.2f}\n Simulation Speed = {speed:.2f}\n Launch angle = {angle:.2f}°\n'
+    
+centradius_slider = slider(min=15000, max=45000, value=Centradius, length=500, bind=update_radius, right=15)
+wtext(text=f'Centrifuge Radius \n\n')
+pmass_slider = slider(min=100, max=200, value=pmass, length=500, bind=update_pmass, right=15)
+wtext(text=f'Penguin Mass \n\n')
+#gravity_slider = slider(min=0, max=20, value=gravity, length=500, bind=update_gravity, right=15) 
+#wtext(text=f'Gravity \n\n')
+rpm_slider = slider(min=0, max=6000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
+wtext(text=f'RPM \n\n')
+speed_slider = slider(min=0, max=2000, value=speed, length=500, bind=update_speed, right=15, step = 5)
+wtext(text=f'Simulation Speed \n\n')
+angle_slider = slider(min=-90, max=90, value=angle, length=500, bind=update_angle, right=15, step = 5)
+wtext(text=f'Launch angle \n\n')
+
+launched = False
+i = 0
+
+def spin():
+    global launched, i
+    spinner.disabled = True
+    launcher.disabled = False
+    while (!launched):
+        rate(rpm)
+        centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
+        theta = i*0.05
+        penguin.pos = penguin.pos + vec(centrifugue.radius * (1.02/28) * cos(theta), centrifugue.radius * (1.02/28) * sin(theta), 0)
+        i+=1
+    #launch()
+
+actualRadius = centrifugue.radius / 1000
+velocity = actualRadius * (2 * pi) * (rpm / 60) 
+acceleration = vec(0, 9.81, 0)
+G = 6.67 * (10 ** -11)
+M = 6 * (10 ** 24)
+dist = penguin.pos - earth.pos
+dt = 3600
+    
+def launch():
+    global launched
+    launcher.disabled = True
+    launched = True
+    
+spinner = button(text = "SPIN", bind = spin, disabled = False)
+launcher = button(text = "LAUNCH", bind = launch, disabled = True)
+
+zed = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius), 
+text = f'\nSpeed = 0 m/s\n Acceleration = {acceleration.mag} m/s²\n')
+
+crashed = False
+followPenguin = True
+
+while True:
+    global t
+    rate(speed)
+    if (t == 0):
+        velocity = rotate(norm(scene.up) * actualRadius * (2 * pi) * (rpm / 60), angle = angle/360 * 2 * pi, axis = scene.forward)
+    if (launched):
+        dist = penguin.pos - earth.pos
+        penguin.pos = penguin.pos + velocity
+        velocity = velocity + acceleration
+        acceleration = ((-1 * G * M) / (dist.mag ** 2)) * norm(dist)
+        #if (t % 101 == 0):
+            #print(dist.mag)
+            #print(acceleration.mag)
+            #print(velocity.mag)
+            #print(scene.camera.pos)
+        if (t % 57 == 0):
+            zed.text = f'\nSpeed = {velocity.mag:.2f} m/s\n Acceleration = {acceleration.mag:.2f} m/s²\n'
+        if (dist.mag > 6700000):
+            followPenguin = True
+            bg.texture = "https://th.bing.com/th/id/OIP.NazSofAMbJFgsmr51USrdgAAAA?w=302&h=181&c=7&r=0&o=5&pid=1.7"
+            bg.pos = penguin.pos + vec(0, 20000000, 40000000)
+        else:
+            bg.texture = "https://th.bing.com/th/id/OIP.2VpJ6szrAmIlcKgPhRyyEwHaEK?w=321&h=180&c=7&r=0&o=5&pid=1.7"
+            bg.pos = earth.pos + vec(0, 20000000, 40000000)
+        if followPenguin:
+            if (penguin.radius < 3000):
+                penguin.radius = 3000
+            scene.camera.pos = penguin.pos + (scene.forward * -1 * 70000)
+        #else:
+            #scene.camera.pos = vec(77440.8, 6389600, 278902)
+            #scene.camera.axis = vec(1201350, 551637, 5615770)
+        w.pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius)
+        zed.pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius)
+        if (dist.mag < earth.radius - 5000):
+            crashed = True
+            break
+        if (abs(acceleration.mag) < 0.01):
+            break
+        if (t != 0):
+            sCurve.plot(t, velocity.mag)
+        t += dt
+
+if crashed:
+    BadEnding = text(text = 'OH NO! \nIt\'s a penguin \ncrash and burn!!', align = 'center', color = color.red, pos = vec(0, 30000, 0))
+    BadEnding.height = 1
+    scene.camera.axis = BadEnding.axis.cross(vec(0, -1, 0))
+    scene.camera.pos = BadEnding.pos + (scene.camera.axis * -1 * 10)
+else:
+    GoodEnding = text(text = 'Your penguin journeyed \nto a galaxy far far \naway..', align = 'center', color = color.green, pos = vec(0, 30000, 0))
+    GoodEnding.height = 1
+    scene.camera.axis = GoodEnding.axis.cross(vec(0, -1, 0))
+    scene.camera.pos = GoodEnding.pos + (scene.camera.axis * -1 * 10)
