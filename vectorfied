@@ -142,10 +142,10 @@ while True:
         penguin.pos = penguin.pos + velocity
         velocity = velocity + acceleration
         acceleration = ((-1 * G * M) / (dist.mag ** 2)) * norm(dist)
-        if (t % 101 == 0):
-            print(dist.mag)
-            print(acceleration.mag)
-            print(velocity.mag)
+        #if (t % 101 == 0):
+            #print(dist.mag)
+            #print(acceleration.mag)
+            #print(velocity.mag)
             #print(scene.camera.pos)
         if (t % 57 == 0):
             zed.text = f'\nSpeed = {velocity.mag:.2f} m/s\n Acceleration = {acceleration.mag:.2f} m/s²\n'
@@ -180,7 +180,7 @@ if crashed:
     scene.camera.axis = BadEnding.axis.cross(vec(0, -1, 0))
     scene.camera.pos = BadEnding.pos + (scene.camera.axis * -1 * 10)
 else:
-    GoodEnding = text(text = 'Your penguin journeyed \nto the galaxy far far \naway..', align = 'center', color = color.green, pos = vec(0, 30000, 0))
+    GoodEnding = text(text = 'Your penguin journeyed \nto a galaxy far far \naway..', align = 'center', color = color.green, pos = vec(0, 30000, 0))
     GoodEnding.height = 1
     scene.camera.axis = GoodEnding.axis.cross(vec(0, -1, 0))
     scene.camera.pos = GoodEnding.pos + (scene.camera.axis * -1 * 10)
