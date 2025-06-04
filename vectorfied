@@ -8,10 +8,6 @@ scene.userpan = False
 scene.userspin = False
 
 t = 0
-g1 = graph(title = "Speed vs Time", align = "right", width = 450, height = 275, xtitle = "Time (s)", ytitle = "Speed (m/s)")
-sCurve = gcurve(graph = g1, color = color.red, label = "Speed (m/s)")
-sCurve.plot(t, 0)
-sCurve.delete()
 
 radii = 6378137
 
@@ -39,6 +35,15 @@ penguin = cylinder(pos = centrifugue.pos + vec(1201.350, 551.637, 5615.770) * -5
 make_trail = True, trail_radius = 500, trail_type = "points", retain = 40, 
 texture = "https://th.bing.com/th/id/OIP.Kbkh1q-J4T8vnU2NM1DW6AHaI-?w=149&h=180&c=7&r=0&o=5&pid=1.7")
 
+g1 = graph(title = "Speed vs Time", width = 450, height = 275, xtitle = "Time (s)", ytitle = "Speed (m/s)")
+sCurve = gcurve(graph = g1, color = color.red, label = "Speed (m/s)")
+sCurve.plot(t, 0)
+sCurve.delete()
+
+g2 = graph(title = "Acceleration vs Time", width = 450, height = 275, xtitle = "Time (s)", ytitle = "Acceleration (m/s^2)")
+aCurve = gcurve(graph = g2, color = color.blue, label = "Acceleration (m/s^2)")
+aCurve.plot(t, 0)
+aCurve.delete()
 #radius_label = wtext(text=f'\nRadius = {Centradius/1000:.2f} m\n')
 #pmass_label = wtext(text=f'Penguin Mass = {pmass:.2f} kg\n')
 #gravity_label = wtext(text=f'Gravity = {gravity:.2f} m/s²\n')
@@ -173,6 +178,7 @@ while True:
             break
         if (t != 0):
             sCurve.plot(t, velocity.mag)
+            aCurve.plot(t, acceleration.mag)
         t += dt
 
 if crashed:
