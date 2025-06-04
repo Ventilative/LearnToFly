@@ -8,9 +8,10 @@ scene.userpan = False
 scene.userspin = False
 
 t = 0
-g1 = graph(title = "Speed vs Time", align = "right", width = 400, height = 200)
+g1 = graph(title = "Speed vs Time", align = "right", width = 500, height = 275, xtitle = "Time (s)", ytitle = "Speed (m/s)")
 sCurve = gcurve(graph = g1, color = color.red, label = "Speed (m/s)")
 sCurve.plot(t, 0)
+sCurve.delete()
 
 radii = 6378137
 
