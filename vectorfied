@@ -1,6 +1,6 @@
 Web VPython 3.2
 
-scene = canvas(width = 900, height = 600)
+scene = canvas(width = 900, height = 600, resizable = False)
 scene.background = vector(135/255, 206/255, 235/255)
 
 scene.userzoom = False
@@ -110,6 +110,10 @@ launched = False
 
 def spin():
     spinner.disabled = True
+    centradius_slider.disabled = True
+    pmass_slider.disabled = True
+    rpm_slider.disabled = True
+    angle_slider.disabled = True
     for i in range(5 * rpm):
         rate(rpm)
         centrifugue.rotate(angle = 0.05, axis = vec(1201.350, 551.637, 5615.770))
