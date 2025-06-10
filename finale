@@ -88,7 +88,7 @@ pmass_slider = slider(min=100, max=200, value=pmass, length=500, bind=update_pma
 wtext(text=f'Penguin Mass \n\n')
 rpm_slider = slider(min=0, max=6000, value=rpm, length=500, bind=update_rpm, right=15, step = 5)
 wtext(text=f'RPM \n\n')
-speed_slider = slider(min=0, max=2000, value=speed, length=500, bind=update_speed, right=15, step = 5)
+speed_slider = slider(min=60, max=2000, value=speed, length=500, bind=update_speed, right=15, step = 5)
 wtext(text=f'Simulation Speed \n\n')
 angle_slider = slider(min=-90, max=90, value=angle, length=500, bind=update_angle, right=15, step = 5)
 wtext(text=f'Launch angle \n\n')
