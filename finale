@@ -212,14 +212,6 @@ try:
 except:
     sleep(0.1)
     if crashed:
-        sleep(0.1)
-        string1 = "OH NO!\nIt's a penguin\ncrash and burn!!"
-        BadEnding = text(text = string1, align = "center", color = color.red, pos = vec(0, 30000, 0))
-        scene.camera.pos = BadEnding.pos + (BadEnding.axis.cross(vec(0, -1, 0)) * -1 * 10)
-        scene.camera.axis = BadEnding.axis.cross(vec(0, -1, 0))
+        zed.text = "OH NO!\nIt's a penguin\ncrash and burn!!"
     else:
-        sleep(0.1)
-        string2 = "Your penguin journeyed\nto a galaxy far far\naway.."
-        GoodEnding = text(text = string2, align = "center", color = color.green, pos = vec(0, 30000, 0))
-        scene.camera.pos = GoodEnding.pos + (GoodEnding.axis.cross(vec(0, -1, 0)) * -1 * 10)
-        scene.camera.axis = GoodEnding.axis.cross(vec(0, -1, 0))
+        zed.text = "Your penguin journeyed\nto a galaxy far far\naway.."
