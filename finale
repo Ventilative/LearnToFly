@@ -46,7 +46,7 @@ try:
     aCurve.plot(t, 0)
     aCurve.delete()
     
-    w = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius),
+    w = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(5900, 5200.637, 5615.770) * 20 + (scene.up * -1 * Centradius),
     text = "\nRadius = {:.2f} m\n Penguin Mass = {:.2f} kg\n Gravity (Surface) = {:.2f} m/s²\n RPM = {:.2f}\n Simulation Speed = {:.2f}\n Launch angle = {:.2f}°\n".format(
         Centradius/1000, pmass, gravity, rpm, speed, angle))
     
@@ -89,7 +89,8 @@ try:
         angle = s.value
         w.text = "\nRadius = {:.2f} m\n Penguin Mass = {:.2f} kg\n Gravity (Surface) = {:.2f} m/s²\n RPM = {:.2f}\n Simulation Speed = {:.2f}\n Launch angle = {:.2f}°\n".format(
         radius/1000, pmass, gravity, rpm, speed, angle)
-        
+ 
+    wtext(text="\n")
     centradius_slider = slider(min=15000, max=45000, value=Centradius, length=500, bind=update_radius, right=15)
     wtext(text="Centrifuge Radius \n\n")
     pmass_slider = slider(min=100, max=200, value=pmass, length=500, bind=update_pmass, right=15)
@@ -130,7 +131,7 @@ try:
         
     spinner = button(text = "SPIN", bind = spin, disabled = False)
     
-    zed = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius), 
+    zed = label(canvas = scene, color = color.black, visible = True, pos = scene.camera.pos + vec(-2000, 3470, 4615) * 20 + (scene.up * -1 * Centradius), 
     text = "\nSpeed = 0 m/s\n Acceleration = {:.2f} m/s²\n".format(acceleration.mag))
     
     crashed = False
@@ -152,11 +153,6 @@ try:
             penguin.pos = penguin.pos + velocity
             velocity = velocity + acceleration
             acceleration = ((-1 * G * M) / (dist.mag ** 2)) * norm(dist)
-            #if (t % 101 == 0):
-                #print(dist.mag)
-                #print(acceleration.mag)
-                #print(velocity.mag)
-                #print(scene.camera.pos)
             if (t % 57 == 0):
                 zed.text = "\nSpeed = {:.2f} m/s\n Acceleration = {:.2f} m/s²\n".format(velocity.mag, acceleration.mag)
             if (dist.mag > 6700000):
