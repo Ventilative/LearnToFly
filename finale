@@ -180,8 +180,8 @@ try:
                     if (recallPoint3.mag == 0):
                         recallPoint3 = penguin.pos
                         bg.pos = recallPoint3 + vec(0, 20000000, 20000000)
-            w.pos = scene.camera.pos + vec(6000, 5000.637, 5615.770) * 20 + (scene.up * -1 * Centradius)
-            zed.pos = scene.camera.pos + vec(-2000, 3350, 4615) * 20 + (scene.up * -1 * Centradius)
+            w.pos = scene.camera.pos + vec(5900, 5200.637, 5615.770) * 20 + (scene.up * -1 * Centradius)
+            zed.pos = scene.camera.pos + vec(-2000, 3470, 4615) * 20 + (scene.up * -1 * Centradius)
             if (dist.mag < earth.radius - 5000):
                 crashed = True
                 break
